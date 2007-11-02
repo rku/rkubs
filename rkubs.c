@@ -210,7 +210,7 @@ int main(int argc, char **argv)
         break;
       case '?':
       case 'h':
-	if(p++ == NULL) p = argv[0];
+        if(p++ == NULL) p = argv[0];
         printf("%s [-h] [-p <port>] [-n <name>] [<host>]\n\n", p);
         printf("-h          print usage\n");
         printf("-p <port>   set tcp port\n");
@@ -223,7 +223,7 @@ int main(int argc, char **argv)
   if(argc>optind)
   {
     create_game = FALSE;
- 
+
     he = gethostbyname(argv[optind]);
     if(he==NULL)
     {
@@ -248,7 +248,7 @@ int main(int argc, char **argv)
 
   game(&session);
 
-  return(0);
+  return 0;
 }
 
 /** set the player name of a battlefield **/
@@ -360,7 +360,7 @@ void clear_input_buffer(void)
 
   tv.tv_usec = 0;
   tv.tv_sec = 0;
- 
+
   FD_ZERO(&fds);
   FD_SET(fileno(stdin), &fds);
 
@@ -423,11 +423,11 @@ int read_choice( char *choices, size_t count, char *prompt, ...)
     fflush(stdout);
 
     c = fgetc(stdin);
-    if(c == '\n') return(TRUE);
+    if(c == '\n') return TRUE;
 
     c = tolower(c);
     for(i = 0; i < count; i++)
-      if(c == tolower(choices[i])) return(tolower(choices[i]));
+      if(c == tolower(choices[i])) return tolower(choices[i]);
 
     printf("*** Invalid choice\n");
   }
@@ -442,14 +442,14 @@ void set_new_game(game_session *g)
   struct       sockaddr_in sin;
   net_msg      msg;
   int          new_sock = 0;
-    
+
   snprintf((char*)&game_name, NAME_MAXLEN,
     "%s's game", g->field_a.player_name);
 
   printf("*** Hosting game \"%s\".\n", game_name);
   printf("*** Waiting for opponent (^C to abort)...... ");
   fflush(stdout);
- 
+
   sin.sin_addr.s_addr = INADDR_ANY;
   sin.sin_port = htons(g->port);
   sin.sin_family = PF_INET;
@@ -574,8 +574,8 @@ void game(game_session *g)
             g->field_b.player_name);
             msg.msg_type = MSG_TYPE_GAME_HIT;
           }
-	  else
-	  {
+    else
+    {
             printf("\n*** %s failed at %c%i!\n",
               g->field_b.player_name,
               'A' + msg.point.y,
@@ -606,7 +606,7 @@ void game(game_session *g)
         fprintf(stderr, "Invalid message type received!\n");
       }
     }
- 
+
     if(g->field_a.hits >= SHIP_PIECES) finish(g);
 
     wait_for_opponent = FALSE;
@@ -709,7 +709,7 @@ void set_ships_manual(game_session *g)
       {
         ships[i].position.x = (int)(isdigit(*p)) ? *p - '1' : *(p + 1) - '1';
         ships[i].position.y = (int)(isdigit(*p)) ?
-	  toupper(*(p + 1)) - 'A' : toupper(*p) - 'A';
+        toupper(*(p + 1)) - 'A' : toupper(*p) - 'A';
         break;
       }
       else
@@ -788,7 +788,7 @@ void set_ships_random(game_session *g)
       ships[i].position.y = y;
 
       if(set_ship(g, i)) break;
-    }            
+    }
   }
 
   print_fields(g, FALSE);
@@ -807,12 +807,12 @@ bool set_ship(game_session *g, int si)
   for(i = 0; i < s.size; i++)
   {
     if(x < 0 || y < 0 || x >= BFIELD_SIZEX || y >= BFIELD_SIZEY)
-      return(FALSE);
+      return FALSE;
     if(isdigit(g->field_a.field[y][x]))
-      return(FALSE);
- 
+      return FALSE;
+
     tmpf.field[y][x] = '1' + si;
- 
+
     switch(s.direction)
     {
       case SHIP_DIRECTION_DU:
@@ -821,7 +821,7 @@ bool set_ship(game_session *g, int si)
         break;
       case SHIP_DIRECTION_DD:
         x++;
-	y++;
+        y++;
         break;
       case SHIP_DIRECTION_H:
         x++;
@@ -835,7 +835,7 @@ bool set_ship(game_session *g, int si)
 
   g->field_a = tmpf;
 
-  return(TRUE);
+  return TRUE;
 }
 
 /** send a chat message **/
@@ -859,16 +859,16 @@ bool attack(game_session *g, battlefield *field, net_msg *msg)
     printf("\n+++ malformed attack (%i,%i)\n", x, y);
     exit(-1);
   }
- 
+
   if(isdigit(field->field[y][x]))
   {
     field->field[y][x] = 'X';
     field->hits++;
-    return(TRUE); 
+    return TRUE; 
   }
 
   field->field[y][x] = 'x';
-  return(FALSE);
+  return FALSE;
 }
 
 /** process an attack response **/
@@ -885,9 +885,9 @@ bool process_attack_response(game_session *g, net_msg *msg)
     printf("FAILED\n");
     g->field_b.field[msg->point.y][msg->point.x] = '~';
   }
-  else return(FALSE);
+  else return FALSE;
 
-  return(TRUE);
+  return TRUE;
 }
 
 /** write to network **/
@@ -896,7 +896,7 @@ int net_write(game_session *g, net_msg *msg)
   int rs;
 
   _err((rs = send(g->sock, msg, sizeof(net_msg), 0)) != sizeof(net_msg));
-  return(rs);
+  return rs;
 }
 
 /** read from network **/
@@ -912,7 +912,7 @@ int net_read(game_session *g, net_msg *msg)
     exit(-1);
   }
 
-  return(rs);
+  return rs;
 }
 
 /** finish the game, check for cheats and print resume **/
