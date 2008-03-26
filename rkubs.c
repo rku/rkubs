@@ -574,8 +574,8 @@ void game(game_session *g)
             g->field_b.player_name);
             msg.msg_type = MSG_TYPE_GAME_HIT;
           }
-    else
-    {
+          else
+          {
             printf("\n*** %s failed at %c%i!\n",
               g->field_b.player_name,
               'A' + msg.point.y,
@@ -794,7 +794,7 @@ void set_ships_random(game_session *g)
   print_fields(g, FALSE);
 }
 
-/** set a ship, si ist the ship size (1 to n) **/
+/** set a ship, si is the ship size (1 to n) **/
 bool set_ship(game_session *g, int si)
 {
   battlefield tmpf;
