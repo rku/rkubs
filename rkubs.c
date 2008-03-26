@@ -7,7 +7,7 @@
  *
  * gcc -o rkubs rkubs.c -DWITH_ANSI_ESCAPE_SEQ -lcrypto
  *
- * Copyright (C) 2006-2007  Rene Kuettner, <rene@bitkanal.net>
+ * Copyright (C) 2006, 2007, 2008  Rene Kuettner, <rene@bitkanal.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
